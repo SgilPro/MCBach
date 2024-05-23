@@ -88,7 +88,7 @@ describe('App e2e', () => {
       it('should get current user', () => {
         return pactum
           .spec()
-          .get('/users/me')
+          .get('/user')
           .withHeaders({
             Authorization: 'Bearer $S{userAt}',
           })

@@ -24,8 +24,25 @@ model User {
   lastName  String?
 
   comments Comment[]
+  likes    Like[]
 
   @@map("users")
+}
+
+model Album {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title          String
+  albumType      AlbumType @default(ALBUM)
+  releaseAt      DateTime
+  spotifyAlbumId String?
+  artist         String?
+  tracks         String[]
+  comments       Comment[]
+
+  @@map("albums")
 }
 
 model Comment {
@@ -36,18 +53,27 @@ model Comment {
   content String?
   userId  Int
   user    User    @relation(fields: [userId], references: [id])
+  albumId Int
+  album   Album   @relation(fields: [albumId], references: [id])
+  likes   Like[]
 
   @@map("comments")
 }
 
-model Album {
-  id        Int      @id @default(autoincrement())
+model Like {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title       String
-  description String?
-  link        String?
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+  commentId Int
+  comment   Comment @relation(fields: [commentId], references: [id])
 
-  @@map("albums")
+  @@id([userId, commentId])
+}
+
+enum AlbumType {
+  ALBUM
+  SINGLE
+  COMPILATION
 }
