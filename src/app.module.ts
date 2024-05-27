@@ -4,9 +4,6 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AlbumModule } from './album/album.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { ControllerService } from './module/controller/controller.service';
-import { CommentService } from './comment/comment.service';
-import { CommentController } from './comment/comment.controller';
 import { CommentModule } from './comment/comment.module';
 
 @Module({
@@ -18,7 +15,5 @@ import { CommentModule } from './comment/comment.module';
     ConfigModule.forRoot({ isGlobal: true }),
     CommentModule,
   ],
-  providers: [ControllerService, CommentService],
-  controllers: [CommentController],
 })
 export class AppModule {}

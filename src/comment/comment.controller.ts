@@ -1,6 +1,22 @@
 import { CommentService } from './comment.service';
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
-import { CreateCommentDto, GetCommentsDto, GetTopCommentsDto } from './dto';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  CreateCommentDto,
+  EditCommentDto,
+  GetCommentsDto,
+  GetTopCommentsDto,
+} from './dto';
 import { GetUser } from '../auth/decorator';
 import { User } from '@prisma/client';
 import { JwtGuard } from '../auth/guard';
@@ -19,9 +35,33 @@ export class CommentController {
     return this.commentService.getCommentsByAlbumId(dto.albumId);
   }
 
+  @Get('comment/:id')
+  getCommentById(@Param('id', new ParseIntPipe()) id: number) {
+    return this.commentService.getCommentById(id);
+  }
+
   @UseGuards(JwtGuard)
   @Post('comment')
   createComment(@GetUser() user: User, @Body() dto: CreateCommentDto) {
     return this.commentService.createComment(user.id, dto.albumId, dto.content);
+  }
+
+  @UseGuards(JwtGuard)
+  @Patch('comment/:id')
+  editComment(
+    @GetUser() user: User,
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() dto: EditCommentDto,
+  ) {
+    return this.commentService.editComment(user.id, id, dto.content);
+  }
+
+  @UseGuards(JwtGuard)
+  @Delete('comment/:id')
+  deleteComment(
+    @GetUser() user: User,
+    @Param('id', new ParseIntPipe()) id: number,
+  ) {
+    return this.commentService.deleteComment(user.id, id);
   }
 }

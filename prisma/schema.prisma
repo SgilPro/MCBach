@@ -50,12 +50,13 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  content String?
-  userId  Int
-  user    User    @relation(fields: [userId], references: [id])
-  albumId Int
-  album   Album   @relation(fields: [albumId], references: [id])
-  likes   Like[]
+  content   String?
+  isDeleted Boolean @default(false)
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+  albumId   Int
+  album     Album   @relation(fields: [albumId], references: [id])
+  likes     Like[]
 
   @@map("comments")
 }

@@ -1,5 +1,6 @@
 export const CommentSelect = {
   id: true,
+  isDeleted: false,
   content: true,
   userId: true,
   user: {
