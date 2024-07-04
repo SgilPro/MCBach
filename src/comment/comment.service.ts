@@ -54,17 +54,20 @@ export class CommentService {
   }
 
   async getCommentById(commentId: number) {
-    const comments = await this.prisma.comment.findMany({
-      where: {
-        id: commentId,
-        isDeleted: false,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-      select: CommentSelect,
-    });
-    return comments.map(this.transformComment);
+    try {
+      const comment = await this.prisma.comment.findUniqueOrThrow({
+        where: { id: commentId, isDeleted: false },
+        select: CommentSelect,
+      });
+      return this.transformComment(comment[0]);
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException('Comment not found');
+        }
+      }
+      throw error;
+    }
   }
 
   async createComment(userId: number, albumId: number, content: string) {

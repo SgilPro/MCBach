@@ -37,8 +37,8 @@ model Album {
   title          String
   albumType      AlbumType @default(ALBUM)
   releaseAt      DateTime
-  spotifyAlbumId String?
-  artist         Artist[]
+  spotifyAlbumId String?   @unique
+  artists        Artist[]
   tracks         Track[]
   comments       Comment[]
 
@@ -51,7 +51,7 @@ model Artist {
   updatedAt DateTime @updatedAt
 
   name            String
-  spotifyArtistId String?
+  spotifyArtistId String? @unique
   albums          Album[]
 
   @@map("artists")
@@ -62,7 +62,9 @@ model Track {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Album Album[]
+  name           String
+  spotifyTrackId String? @unique
+  Album          Album[]
 
   @@map("tracks")
 }

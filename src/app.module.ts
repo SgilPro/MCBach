@@ -7,17 +7,21 @@ import { PrismaModule } from './prisma/prisma.module';
 import { CommentModule } from './comment/comment.module';
 import { SpotifyModule } from './spotify/spotify.module';
 import { HttpModule } from '@nestjs/axios';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
+    CacheModule.register(),
+    ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
+    HttpModule,
+    SpotifyModule,
+    PrismaModule,
     AuthModule,
     UserModule,
     AlbumModule,
-    PrismaModule,
-    ConfigModule.forRoot({ isGlobal: true }),
-    HttpModule,
     CommentModule,
-    SpotifyModule,
   ],
 })
 export class AppModule {}
